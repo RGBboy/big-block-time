@@ -2,7 +2,7 @@
 
 A time system for the Big Block game engine.
 
-[![Browser Support](https://ci.testling.com/RGBboy/big-block-time.png)
+[![Browser Support](https://ci.testling.com/rgbboy/big-block-time.png)
 ](https://ci.testling.com/RGBboy/big-block-time)
 
 [![Build Status](https://secure.travis-ci.org/RGBboy/big-block-time.png)](http://travis-ci.org/RGBboy/big-block-time)
