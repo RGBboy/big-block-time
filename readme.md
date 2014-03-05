@@ -9,15 +9,19 @@ A time system for the Big Block game engine.
 
 ## API
 
-###.start()
+### .deltaTime
+
+The time in milliseconds since the last event of type fired.
+
+### .start()
 
 Starts the loop
 
-###.stop()
+### .stop()
 
 Starts the loop
 
-###.pause()
+### .pause()
 
 Pauses the loop. When resumed the number of fixed updates during paused will fire.
 
@@ -41,6 +45,8 @@ Fired after the update event
 
 * configuration via provider
 * Alpha for update and render event for interpolation
+* Add .step function
+* Add .replay or .rewind function
 
 ### Tests
 

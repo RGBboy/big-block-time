@@ -1,10 +1,8 @@
 /*!
  * Time System
  *
- * @note: All units are in milliseconds (the JS way)
+ * @note: All time related units are in milliseconds
  *
- * @todo: Add .step function
- * @todo: Add .replay function
  */
 
 /**
