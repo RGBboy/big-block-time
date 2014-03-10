@@ -9,7 +9,10 @@
  * Module Dependencies
  */
 
-var EventEmitter = require('events').EventEmitter;
+var Time,
+    di = require('di'),
+    Date = require('big-block-date'),
+    EventEmitter = require('events').EventEmitter;
 
 /**
  * Time System
@@ -18,7 +21,7 @@ var EventEmitter = require('events').EventEmitter;
  * @return {EventEmitter}
  * @api public
  */
-exports = module.exports = function (Date) {
+Time = function (Date) {
 
   // We need a way to be able to configure this
 
@@ -92,3 +95,14 @@ exports = module.exports = function (Date) {
   return self;
 
 };
+
+/**
+ * Dependency Annotation
+ */
+
+di.annotate(Time, new di.InjectAnnotation(Date));
+
+/**
+ * Module Exports
+ */
+exports = module.exports = Time;
