@@ -12,6 +12,7 @@
 var Time,
     di = require('di'),
     Date = require('big-block-date'),
+    timers = require('timers'),
     EventEmitter = require('events').EventEmitter;
 
 /**
@@ -69,7 +70,7 @@ Time = function (Date) {
         renderAccumulator = 0;
       };
 
-      process.nextTick(loop);
+      timers.setImmediate(loop);
     };
   };
 
@@ -79,7 +80,7 @@ Time = function (Date) {
     fixedAccumulator = 0;
     renderAccumulator = 0;
     self.emit('start');
-    process.nextTick(loop);
+    timers.setImmediate(loop);
   };
 
   self.stop = function () {
