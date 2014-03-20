@@ -6,13 +6,18 @@
  */
 
 /**
+ * Polyfills
+ */
+
+require('setimmediate');
+
+/**
  * Module Dependencies
  */
 
 var Time,
     di = require('big-block').di,
     Date = require('big-block-date'),
-    timers = require('timers'),
     EventEmitter = require('events').EventEmitter;
 
 /**
@@ -70,7 +75,7 @@ Time = function (Date) {
         renderAccumulator = 0;
       };
 
-      timers.setImmediate(loop);
+      setImmediate(loop);
     };
   };
 
@@ -80,7 +85,7 @@ Time = function (Date) {
     fixedAccumulator = 0;
     renderAccumulator = 0;
     self.emit('start');
-    timers.setImmediate(loop);
+    setImmediate(loop);
   };
 
   self.stop = function () {

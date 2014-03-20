@@ -17,14 +17,14 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "big-block": "0.x.x",
-    "big-block-date": "0.x.x"
+    "big-block": ">=0.0.3",
+    "big-block-date": ">=0.0.1",
+    "setimmediate": "1.0.x"
   },
   "devDependencies": {
-    "tape": "latest",
-    "sinon": "latest",
-    "browserify": "latest",
-    "testling": "latest"
+    "tape": "*",
+    "sinon": "*",
+    "testling": "*"
   },
   "testling": {
     "files": [ "./test/*.js"],

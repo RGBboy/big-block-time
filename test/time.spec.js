@@ -59,15 +59,27 @@ test('time should fire fixedupdate event with deltaTime === fixedTimestep, when 
 });
 
 test('time should not fire fixedupdate event when frame takes less than fixedTimestep', function (t) {
-  setup(t);
-  time.on('fixedupdate', function (data) {
+  function fail () {
     t.fail();
-  });
+    t.end();
+    time.stop();
+    teardown(t);
+  };
+  function pass () {
+    t.pass();
+    t.end();
+    time.stop();
+    teardown(t);
+  };
+  setup(t);
+  time.on('fixedupdate', fail);
   time.start();
   clock.tick(fixedTimestep/2);
-  time.stop();
-  teardown(t);
-  t.end();
+  setImmediate(function () {
+    time.removeListener('fixedupdate', fail);
+    time.on('fixedupdate', pass);
+    clock.tick(fixedTimestep/2);
+  });
 });
 
 test('time should fire fixedupdate event with deltaTime === fixedTimestep when frame takes more than fixedTimestep', function (t) {
@@ -116,15 +128,27 @@ test('time should fire update event with deltaTime === frameTime when frame take
 });
 
 test('time should not fire update event when frame takes shorter than renderTimestep', function (t) {
-  setup(t);
-  time.on('update', function (data) {
+  function fail () {
     t.fail();
-  });
+    t.end();
+    time.stop();
+    teardown(t);
+  };
+  function pass () {
+    t.pass();
+    t.end();
+    time.stop();
+    teardown(t);
+  };
+  setup(t);
+  time.on('update', fail);
   time.start();
   clock.tick(renderTimestep/2);
-  time.stop();
-  teardown(t);
-  t.end();
+  setImmediate(function () {
+    time.removeListener('update', fail);
+    time.on('update', pass);
+    clock.tick(renderTimestep/2);
+  });
 });
 
 test('time should fire update event after fixedupdate event', function (t) {
