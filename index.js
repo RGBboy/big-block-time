@@ -10,7 +10,7 @@
  */
 
 var Time,
-    di = require('di'),
+    di = require('big-block').di,
     Date = require('big-block-date'),
     timers = require('timers'),
     EventEmitter = require('events').EventEmitter;
