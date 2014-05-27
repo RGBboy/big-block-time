@@ -37,8 +37,8 @@ Time = function (Date) {
       renderTimestep = 1000/60, 
       paused = true,
       currentTime, // change name to less ambiguous
-      fixedAccumulator,
-      renderAccumulator;
+      fixedAccumulator = 0,
+      renderAccumulator = 0;
 
   self.deltaTime = 0;
 
@@ -55,35 +55,37 @@ Time = function (Date) {
       };
 
       currentTime = newTime;
-      fixedAccumulator += frameTime;
-
-      // Run as many Fixed Updates until fixedAccumulator < fixedTimestep
-      while (fixedAccumulator >= fixedTimestep) {
-        self.deltaTime = fixedTimestep;
-        self.emit('fixedupdate', self);
-        fixedAccumulator -= fixedTimestep;
-      };
-
-      // Run single update and render if renderAccumulator >= renderTimestep
-      renderAccumulator += frameTime;
-      if (renderAccumulator >= renderTimestep) {
-        //alpha = accumulator / renderTimestep;
-        // state = currentState*alpha + previousState * ( 1 - alpha );
-        self.deltaTime = renderAccumulator;
-        self.emit('update', self);
-        self.emit('render', self);
-        renderAccumulator = 0;
-      };
+      self.tick(frameTime);
 
       setImmediate(loop);
+    };
+  };
+
+  self.tick = function (frameTime) {
+    fixedAccumulator += frameTime;
+
+    // Run as many Fixed Updates until fixedAccumulator < fixedTimestep
+    while (fixedAccumulator >= fixedTimestep) {
+      self.deltaTime = fixedTimestep;
+      self.emit('fixedupdate', self);
+      fixedAccumulator -= fixedTimestep;
+    };
+
+    // Run single update and render if renderAccumulator >= renderTimestep
+    renderAccumulator += frameTime;
+    if (renderAccumulator >= renderTimestep) {
+      //alpha = accumulator / renderTimestep;
+      // state = currentState*alpha + previousState * ( 1 - alpha );
+      self.deltaTime = renderAccumulator;
+      self.emit('update', self);
+      self.emit('render', self);
+      renderAccumulator = 0;
     };
   };
 
   self.start = function () {
     paused = false;
     currentTime = Date.now();
-    fixedAccumulator = 0;
-    renderAccumulator = 0;
     self.emit('start');
     setImmediate(loop);
   };

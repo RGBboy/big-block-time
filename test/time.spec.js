@@ -42,6 +42,40 @@ test('Time', function (t) {
 });
 
 /**
+ * time.tick
+ */
+
+test('time.tick should be a function', function (t) {
+  setup(t);
+  t.plan(1);
+  t.equal(typeof time.tick, 'function');
+  teardown(t);
+});
+
+test('time.tick(x) should emit the correct events in the correct order', function (t) {
+  var events = [];
+  function fixedUpdate () {
+    events.push('fixedupdate');
+  };
+  function update () {
+    events.push('update');
+  };
+  function render () {
+    events.push('render');
+  };
+  setup(t);
+  t.plan(1);
+  time.on('fixedupdate', fixedUpdate);
+  time.on('update', update);
+  time.on('render', render);
+  time.tick(fixedTimestep/2);
+  time.tick(fixedTimestep/2);
+  time.tick(fixedTimestep*2);
+  t.deepEqual(events, ['update', 'render', 'fixedupdate', 'update', 'render', 'fixedupdate', 'fixedupdate', 'update', 'render']);
+  teardown(t);
+});
+
+/**
  * time.start
  */
 
