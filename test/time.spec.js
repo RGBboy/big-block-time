@@ -172,6 +172,18 @@ test('time should not fire fixedupdate event when tick takes less than fixedTime
   });
 });
 
+test('time should fire multiple fixedupdate event with deltaTime === fixedTimestep when tick takes multiple fixedTimestep', function (t) {
+  setup(t);
+  t.plan(6);
+  time.on('fixedupdate', function (data) {
+    t.pass('fire fixedupdate');
+    t.equal(data.deltaTime, 50);
+  });
+  time.tick(3*fixedTimestep);
+  teardown(t);
+});
+
+
 test('time should fire fixedupdate event with deltaTime === fixedTimestep when tick takes more than fixedTimestep', function (t) {
   setup(t);
   t.plan(2);
@@ -198,8 +210,19 @@ test('time should fire update with deltaTime === time since last update when tic
   time.tick(renderTimestep);
 });
 
+test('time should fire single update event with deltaTime === frameTime when tick takes multiple renderTimestep', function (t) {
+  var step = 3 * renderTimestep;
+  setup(t);
+  t.plan(2);
+  time.on('update', function (data) {
+    t.pass('fire update');
+    t.equal(data.deltaTime, step);
+    teardown(t);
+  });
+  time.tick(step);
+});
 
-test('time should fire update event with deltaTime === frameTime when tick takes longer than renderTimestep', function (t) {
+test('time should fire single update event with deltaTime === frameTime when tick takes longer than renderTimestep', function (t) {
   var step = renderTimestep + renderTimestep/2;
   setup(t);
   t.plan(2);
