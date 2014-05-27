@@ -48,15 +48,6 @@ Fired after the update event
 * Add .step function
 * Add .replay or .rewind function
 
-### Tests
-
-* start function
-* start event
-* stop function
-* stop event
-* paused function
-* paused events
-
 ## License 
 
 (The MIT License)
