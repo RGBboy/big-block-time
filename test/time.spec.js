@@ -60,13 +60,13 @@ test('time should fire fixedupdate event with deltaTime === fixedTimestep, when 
 
 test('time should not fire fixedupdate event when frame takes less than fixedTimestep', function (t) {
   function fail () {
-    t.fail();
+    t.fail('fixedupdate event fired');
     t.end();
     time.stop();
     teardown(t);
   };
   function pass () {
-    t.pass();
+    t.pass('fire fixedupdate');
     t.end();
     time.stop();
     teardown(t);
@@ -129,13 +129,13 @@ test('time should fire update event with deltaTime === frameTime when frame take
 
 test('time should not fire update event when frame takes shorter than renderTimestep', function (t) {
   function fail () {
-    t.fail();
+    t.fail('update event fired');
     t.end();
     time.stop();
     teardown(t);
   };
   function pass () {
-    t.pass();
+    t.pass('fire update');
     t.end();
     time.stop();
     teardown(t);
