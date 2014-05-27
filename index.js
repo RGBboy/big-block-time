@@ -89,7 +89,7 @@ Time = function (Date) {
   };
 
   self.stop = function () {
-    self.pause(); // change this or remove stop fn.
+    paused = true;
     self.emit('stop');
   };
 

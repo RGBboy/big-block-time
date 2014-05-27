@@ -74,6 +74,24 @@ test('time.stop should be a function', function (t) {
   teardown(t);
 });
 
+test('calling time.stop when time is stopped should not start time', function (t) {
+  var fail = function () {
+    t.fail('update event fired');
+    t.end();
+    time.stop();
+    teardown(t);
+  };
+  setup(t);
+  t.plan(1);
+  time.start();
+  time.stop();
+  time.on('update', fail);
+  clock.tick(renderTimestep);
+  time.stop();
+  t.pass('update event not fired');
+  teardown(t);
+});
+
 test('time should emit a stop event when stop is called', function (t) {
   setup(t);
   t.plan(1);
