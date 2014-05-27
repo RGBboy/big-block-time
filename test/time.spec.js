@@ -137,27 +137,6 @@ test('time should emit a stop event when stop is called', function (t) {
 });
 
 /**
- * time.pause
- */
-
-test('time.pause should be a function', function (t) {
-  setup(t);
-  t.plan(1);
-  t.equal(typeof time.pause, 'function');
-  teardown(t);
-});
-
-test('time should emit a pause event when pause is called', function (t) {
-  setup(t);
-  t.plan(1);
-  time.once('pause', function () {
-    t.pass('pause fired');
-    teardown(t);
-  });
-  time.pause();
-});
-
-/**
  * fixedupdate event
  */
 

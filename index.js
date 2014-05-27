@@ -35,7 +35,7 @@ Time = function (Date) {
       fixedTimestep = 50,
       maxTimestep = 2000,
       renderTimestep = 1000/60, 
-      paused = true,
+      stopped = true,
       currentTime, // change name to less ambiguous
       fixedAccumulator = 0,
       renderAccumulator = 0;
@@ -43,7 +43,7 @@ Time = function (Date) {
   self.deltaTime = 0;
 
   function loop () {
-    if (!paused) {
+    if (!stopped) {
       // should update to support window.performance.now if supported?
       var newTime = Date.now(),
           frameTime = newTime - currentTime;
@@ -102,7 +102,7 @@ Time = function (Date) {
    * @api public
    */
   self.start = function () {
-    paused = false;
+    stopped = false;
     currentTime = Date.now();
     self.emit('start');
     setImmediate(loop);
@@ -117,13 +117,8 @@ Time = function (Date) {
    * @api public
    */
   self.stop = function () {
-    paused = true;
+    stopped = true;
     self.emit('stop');
-  };
-
-  self.pause = function () {
-    paused = !paused;
-    self.emit('pause');
   };
 
   return self;

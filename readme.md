@@ -21,10 +21,6 @@ Starts the loop
 
 Starts the loop
 
-### .pause()
-
-Pauses the loop. When resumed the number of fixed updates during paused will fire.
-
 ## Events
 
 ### fixedupdate
