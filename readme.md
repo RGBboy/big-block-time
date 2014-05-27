@@ -13,6 +13,11 @@ A time system for the Big Block game engine.
 
 The time in milliseconds since the last event of type fired.
 
+### .tick()
+
+Runs a single tick for time passed, emitting fixedupdate, update and 
+render events.
+
 ### .start()
 
 Starts the loop
@@ -23,9 +28,17 @@ Starts the loop
 
 ## Events
 
+### start
+
+* Fired when time starts looping
+
+### stop
+
+* Fired when time stops looping
+
 ### fixedupdate
 
-* deterministic
+* Deterministic
 * Always fired x times when `time since started / fixedTimeStep = x`
 
 ### update
@@ -35,13 +48,13 @@ Starts the loop
 
 ### render
 
-Fired after the update event
+* Non deterministic
+* Fired after the update event
 
 ## To Do
 
-* configuration via provider
+* configuration
 * Alpha for update and render event for interpolation
-* Add .step function
 * Add .replay or .rewind function
 
 ## License 
