@@ -27,7 +27,7 @@
     "testling": "*"
   },
   "testling": {
-    "files": [ "./test/*.js"],
+    "files": [ "./test/*.spec.js"],
     "browsers": [
       "iexplore/9.0",
       "iexplore/10.0",
