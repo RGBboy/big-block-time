@@ -61,8 +61,18 @@ Time = function (Date) {
     };
   };
 
-  self.tick = function (frameTime) {
-    fixedAccumulator += frameTime;
+  /**
+   * .tick
+   *
+   * Runs a single tick for time passed, emitting fixedupdate, update and 
+   * render events
+   *
+   * @param {Number} time
+   * @return {undefined}
+   * @api public
+   */
+  self.tick = function (time) {
+    fixedAccumulator += time;
 
     // Run as many Fixed Updates until fixedAccumulator < fixedTimestep
     while (fixedAccumulator >= fixedTimestep) {
@@ -72,7 +82,7 @@ Time = function (Date) {
     };
 
     // Run single update and render if renderAccumulator >= renderTimestep
-    renderAccumulator += frameTime;
+    renderAccumulator += time;
     if (renderAccumulator >= renderTimestep) {
       //alpha = accumulator / renderTimestep;
       // state = currentState*alpha + previousState * ( 1 - alpha );
@@ -83,6 +93,14 @@ Time = function (Date) {
     };
   };
 
+  /**
+   * .start
+   *
+   * starts repeated calls to tick
+   *
+   * @return {undefined}
+   * @api public
+   */
   self.start = function () {
     paused = false;
     currentTime = Date.now();
@@ -90,6 +108,14 @@ Time = function (Date) {
     setImmediate(loop);
   };
 
+  /**
+   * .stop
+   *
+   * stops repeated calls to tick
+   *
+   * @return {undefined}
+   * @api public
+   */
   self.stop = function () {
     paused = true;
     self.emit('stop');
