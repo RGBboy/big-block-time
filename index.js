@@ -106,7 +106,7 @@ Time = function (Date) {
  * Dependency Annotation
  */
 
-di.annotate(Time, new di.InjectAnnotation(Date));
+di.annotate(Time, new di.Inject(Date));
 
 /**
  * Module Exports
