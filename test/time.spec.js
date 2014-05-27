@@ -140,109 +140,95 @@ test('time should emit a stop event when stop is called', function (t) {
  * fixedupdate event
  */
 
-test('time should fire fixedupdate event with deltaTime === fixedTimestep, when frame takes fixedTimestep', function (t) {
+test('time should fire fixedupdate event with deltaTime === fixedTimestep, when tick takes fixedTimestep', function (t) {
   setup(t);
   t.plan(2);
   time.on('fixedupdate', function (data) {
     t.pass('fire fixedupdate');
     t.equal(data.deltaTime, fixedTimestep);
-    time.stop();
     teardown(t);
   });
-  time.start();
-  clock.tick(fixedTimestep);
+  time.tick(fixedTimestep);
 });
 
-test('time should not fire fixedupdate event when frame takes less than fixedTimestep', function (t) {
+test('time should not fire fixedupdate event when tick takes less than fixedTimestep', function (t) {
   function fail () {
     t.fail('fixedupdate event fired');
     t.end();
-    time.stop();
     teardown(t);
   };
   function pass () {
     t.pass('fire fixedupdate');
     t.end();
-    time.stop();
     teardown(t);
   };
   setup(t);
   time.on('fixedupdate', fail);
-  time.start();
-  clock.tick(fixedTimestep/2);
+  time.tick(fixedTimestep/2);
   setImmediate(function () {
     time.removeListener('fixedupdate', fail);
     time.on('fixedupdate', pass);
-    clock.tick(fixedTimestep/2);
+    time.tick(fixedTimestep/2);
   });
 });
 
-test('time should fire fixedupdate event with deltaTime === fixedTimestep when frame takes more than fixedTimestep', function (t) {
+test('time should fire fixedupdate event with deltaTime === fixedTimestep when tick takes more than fixedTimestep', function (t) {
   setup(t);
   t.plan(2);
   time.on('fixedupdate', function (data) {
     t.pass('fire fixedupdate');
     t.equal(data.deltaTime, 50);
-    time.stop();
     teardown(t);
   });
-  time.start();
-  clock.tick(fixedTimestep + fixedTimestep/2);
+  time.tick(fixedTimestep + fixedTimestep/2);
 });
 
 /**
  * update event
  */
 
-test('time should fire update with deltaTime === time since last update when frame takes renderTimestep', function (t) {
+test('time should fire update with deltaTime === time since last update when tick takes renderTimestep', function (t) {
   setup(t);
   t.plan(2);
   time.on('update', function (data) {
     t.pass('fire update');
     t.equal(data.deltaTime, renderTimestep);
-    time.stop();
     teardown(t);
   });
-  time.start();
-  clock.tick(renderTimestep);
+  time.tick(renderTimestep);
 });
 
 
-test('time should fire update event with deltaTime === frameTime when frame takes longer than renderTimestep', function (t) {
+test('time should fire update event with deltaTime === frameTime when tick takes longer than renderTimestep', function (t) {
   var step = renderTimestep + renderTimestep/2;
   setup(t);
   t.plan(2);
   time.on('update', function (data) {
     t.pass('fire update');
     t.equal(data.deltaTime, step);
-    time.stop();
     teardown(t);
   });
-  time.start();
-  clock.tick(step);
+  time.tick(step);
 });
 
-test('time should not fire update event when frame takes shorter than renderTimestep', function (t) {
+test('time should not fire update event when tick takes shorter than renderTimestep', function (t) {
   function fail () {
     t.fail('update event fired');
     t.end();
-    time.stop();
     teardown(t);
   };
   function pass () {
     t.pass('fire update');
     t.end();
-    time.stop();
     teardown(t);
   };
   setup(t);
   time.on('update', fail);
-  time.start();
-  clock.tick(renderTimestep/2);
+  time.tick(renderTimestep/2);
   setImmediate(function () {
     time.removeListener('update', fail);
     time.on('update', pass);
-    clock.tick(renderTimestep/2);
+    time.tick(renderTimestep/2);
   });
 });
 
@@ -256,12 +242,10 @@ test('time should fire update event after fixedupdate event', function (t) {
   time.on('update', function (data) {
     step += 1;
     t.equal(step, 2);
-    time.stop();
     teardown(t);
     t.end();
   });
-  time.start();
-  clock.tick(fixedTimestep);
+  time.tick(fixedTimestep);
 });
 
 /**
@@ -278,10 +262,8 @@ test('time should fire render event after update event', function (t) {
   time.on('render', function (data) {
     step += 1;
     t.equal(step, 2);
-    time.stop();
     teardown(t);
     t.end();
   });
-  time.start();
-  clock.tick(renderTimestep);
+  time.tick(renderTimestep);
 });
