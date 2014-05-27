@@ -42,7 +42,7 @@ test('Time', function (t) {
 });
 
 /**
- * time.stop
+ * time.start
  */
 
 test('time.start should be a function', function (t) {
@@ -64,7 +64,7 @@ test('time should emit a start event when start is called', function (t) {
 });
 
 /**
- * time.start
+ * time.stop
  */
 
 test('time.stop should be a function', function (t) {
