@@ -37,8 +37,8 @@ var teardown = function (t) {
  */
 
 test('Time', function (t) {
-    t.plan(1);
-    t.ok(Time, 'class should exist');
+  t.plan(1);
+  t.ok(Time, 'class should exist');
 });
 
 /**
