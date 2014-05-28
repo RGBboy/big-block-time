@@ -29,14 +29,12 @@ var Time,
  */
 Time = function (Date) {
 
-  // We need a way to be able to configure this
-
   var self = new EventEmitter(),
       fixedTimestep = 50,
       maxTimestep = 2000,
       renderTimestep = 1000/60, 
       stopped = true,
-      currentTime, // change name to less ambiguous
+      lastTime,
       fixedAccumulator = 0,
       renderAccumulator = 0;
 
@@ -44,17 +42,16 @@ Time = function (Date) {
 
   function loop () {
     if (!stopped) {
-      // should update to support window.performance.now if supported?
-      var newTime = Date.now(),
-          frameTime = newTime - currentTime;
 
+      var newTime = Date.now(),
+          frameTime = newTime - lastTime;
+
+      // spriral of death (frame of work is taking longer than maxTimestep)
       if (frameTime > maxTimestep) {
         self.stop();
-        //frameTime = maxFrameTime;
-        console.log('!!!Spiral Of Death!!!');
       };
 
-      currentTime = newTime;
+      lastTime = newTime;
       self.tick(frameTime);
 
       setImmediate(loop);
@@ -72,9 +69,8 @@ Time = function (Date) {
    * @api public
    */
   self.tick = function (time) {
-    fixedAccumulator += time;
-
     // Run as many Fixed Updates until fixedAccumulator < fixedTimestep
+    fixedAccumulator += time;
     while (fixedAccumulator >= fixedTimestep) {
       self.deltaTime = fixedTimestep;
       self.emit('fixedupdate', self);
@@ -84,8 +80,6 @@ Time = function (Date) {
     // Run single update and render if renderAccumulator >= renderTimestep
     renderAccumulator += time;
     if (renderAccumulator >= renderTimestep) {
-      //alpha = accumulator / renderTimestep;
-      // state = currentState*alpha + previousState * ( 1 - alpha );
       self.deltaTime = renderAccumulator;
       self.emit('update', self);
       self.emit('render', self);
@@ -103,7 +97,7 @@ Time = function (Date) {
    */
   self.start = function () {
     stopped = false;
-    currentTime = Date.now();
+    lastTime = Date.now();
     fixedAccumulator = 0;
     renderAccumulator = 0;
     self.emit('start');
