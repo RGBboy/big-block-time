@@ -49,7 +49,7 @@ Time = function (Date) {
           frameTime = newTime - currentTime;
 
       if (frameTime > maxTimestep) {
-        self.pause();
+        self.stop();
         //frameTime = maxFrameTime;
         console.log('!!!Spiral Of Death!!!');
       };
@@ -104,6 +104,8 @@ Time = function (Date) {
   self.start = function () {
     stopped = false;
     currentTime = Date.now();
+    fixedAccumulator = 0;
+    renderAccumulator = 0;
     self.emit('start');
     setImmediate(loop);
   };

@@ -13,6 +13,7 @@ var test = require('tape'),
     maxTimestep = 2000,
     renderTimestep = 1000/60,
     clock,
+    sandbox,
     time;
 
 /**
@@ -20,7 +21,8 @@ var test = require('tape'),
  */
 
 var setup = function (t) {
-  clock = sinon.useFakeTimers(0, 'Date'),
+  clock = sinon.useFakeTimers(0, 'Date');
+  sandbox = sinon.sandbox.create();
   time = Time(Date);
 };
 
@@ -29,6 +31,7 @@ var setup = function (t) {
  */
 
 var teardown = function (t) {
+  sandbox.restore();
   clock.restore();
 };
 
@@ -97,6 +100,52 @@ test('time should emit a start event when start is called', function (t) {
   time.start();
 });
 
+test('time.start should start time running', function (t) {
+  var count = 1,
+      step = 100;
+  function loop () {
+    if (count === 3) {
+      t.equal(time.tick.callCount, 3);
+      t.equal(time.tick.firstCall.args[0], 0);
+      t.equal(time.tick.secondCall.args[0], step);
+      t.equal(time.tick.thirdCall.args[0], step);
+      time.stop();
+      teardown(t);
+      return;
+    };
+    count += 1;
+    clock.tick(step);
+    setImmediate(loop);
+  };
+  setup(t);
+  sandbox.spy(time, 'tick');
+  t.plan(4);
+  time.start();
+  setImmediate(loop);
+});
+
+test('when time is running and tick takes longer than maxTimestep, time should stop running', function (t) {
+  var count = 1,
+      step = maxTimestep + 1;
+  function loop () {
+    if (count === 3) {
+      t.equal(time.tick.callCount, 2);
+      t.equal(time.tick.firstCall.args[0], 0);
+      t.equal(time.tick.secondCall.args[0], step);
+      teardown(t);
+      return;
+    };
+    count += 1;
+    clock.tick(step);
+    setImmediate(loop);
+  };
+  setup(t);
+  sandbox.spy(time, 'tick');
+  t.plan(3);
+  time.start();
+  setImmediate(loop);
+});
+
 /**
  * time.stop
  */
@@ -108,24 +157,6 @@ test('time.stop should be a function', function (t) {
   teardown(t);
 });
 
-test('calling time.stop when time is stopped should not start time', function (t) {
-  var fail = function () {
-    t.fail('update event fired');
-    t.end();
-    time.stop();
-    teardown(t);
-  };
-  setup(t);
-  t.plan(1);
-  time.start();
-  time.stop();
-  time.on('update', fail);
-  clock.tick(renderTimestep);
-  time.stop();
-  t.pass('update event not fired');
-  teardown(t);
-});
-
 test('time should emit a stop event when stop is called', function (t) {
   setup(t);
   t.plan(1);
@@ -134,6 +165,57 @@ test('time should emit a stop event when stop is called', function (t) {
     teardown(t);
   });
   time.stop();
+});
+
+test('time.stop should stop time running', function (t) {
+  var count = 1,
+      step = 100;
+  function loop () {
+    if (count === 2) {
+      time.stop();
+    };
+    if (count === 3) {
+      t.equal(time.tick.callCount, 2);
+      t.equal(time.tick.firstCall.args[0], 0);
+      t.equal(time.tick.secondCall.args[0], step);
+      teardown(t);
+      return;
+    };
+    count += 1;
+    clock.tick(100);
+    setImmediate(loop);
+  };
+  setup(t);
+  sandbox.spy(time, 'tick');
+  t.plan(3);
+  time.start();
+  setImmediate(loop);
+});
+
+test('calling time.stop when time is stopped should not start time', function (t) {
+  var count = 1,
+      step = 100;
+  function loop () {
+    if (count === 2) {
+      time.stop();
+      time.stop();
+    };
+    if (count === 3) {
+      t.equal(time.tick.callCount, 2);
+      t.equal(time.tick.firstCall.args[0], 0);
+      t.equal(time.tick.secondCall.args[0], step);
+      teardown(t);
+      return;
+    };
+    count += 1;
+    clock.tick(100);
+    setImmediate(loop);
+  };
+  setup(t);
+  sandbox.spy(time, 'tick');
+  t.plan(3);
+  time.start();
+  setImmediate(loop);
 });
 
 /**
