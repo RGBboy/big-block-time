@@ -13,18 +13,18 @@ A time system for the Big Block game engine.
 
 The time in milliseconds since the last event of type fired.
 
-### .tick()
+### .tick(ms)
 
-Runs a single tick for time passed, emitting fixedupdate, update and 
+Runs a single tick for `ms` passed, emitting fixedupdate, update and 
 render events.
 
 ### .start()
 
-Starts the loop
+Starts the loop calling tick
 
 ### .stop()
 
-Starts the loop
+Starts the loop calling tick
 
 ## Events
 
