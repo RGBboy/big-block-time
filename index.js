@@ -38,6 +38,8 @@ Time = function (Date) {
       fixedAccumulator = 0,
       renderAccumulator = 0;
 
+  self.setMaxListeners(100);
+
   self.deltaTime = 0;
 
   function loop () {
